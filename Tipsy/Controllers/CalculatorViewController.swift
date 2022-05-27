@@ -9,6 +9,8 @@
 import UIKit
 
 class CalculatorViewController: UIViewController {
+    
+    var tip = 0.1
 
     @IBOutlet weak var billTextField: UITextField!
     @IBOutlet weak var zeroPctButton: UIButton!
@@ -17,14 +19,32 @@ class CalculatorViewController: UIViewController {
     @IBOutlet weak var splitNumberLabel: UILabel!
 
     @IBAction func tipChanged(_ sender: UIButton) {
+        // Deselect all buttons
+        zeroPctButton.isSelected = false
+        tenPctButton.isSelected = false
+        twentyPctButton.isSelected = false
         
+        // Highlight sender button
+        sender.isSelected = true
+        
+        // Change tip by sender button
+        switch sender {
+        case zeroPctButton:
+            tip = 0.0
+        case tenPctButton:
+            tip = 0.1
+        case twentyPctButton:
+            tip = 0.2
+        default:
+            break
+        }
     }
     
-    
     @IBAction func stepperValueChanged(_ sender: UIStepper) {
+        
     }
     
     @IBAction func calculatePressed(_ sender: UIButton) {
-        
+        print(tip)
     }
 }
