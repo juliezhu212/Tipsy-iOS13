@@ -11,7 +11,7 @@ import UIKit
 class CalculatorViewController: UIViewController {
     
     var eachPerson: Double?
-    var tipPercentage = 0.1
+    var tip = 0.1
     var numberOfPeople = 2.0
     
     @IBOutlet weak var billTextField: UITextField!
@@ -32,11 +32,11 @@ class CalculatorViewController: UIViewController {
         // Change tip by sender button
         switch sender {
         case zeroPctButton:
-            tipPercentage = 0
+            tip = 0
         case tenPctButton:
-            tipPercentage = 0.1
+            tip = 0.1
         case twentyPctButton:
-            tipPercentage = 0.2
+            tip = 0.2
         default:
             break
         }
@@ -49,15 +49,11 @@ class CalculatorViewController: UIViewController {
     
     @IBAction func calculatePressed(_ sender: UIButton) {
         if let total = Double(billTextField.text!) {
-            let bill = total * (1 + tipPercentage) / numberOfPeople
+            let bill = total * (1 + tip) / numberOfPeople
             eachPerson = round(bill * 100) / 100
             performSegue(withIdentifier: "goToResultsSegue", sender: self)
         } else {
-            let alert = UIAlertController(title: "Alert",
-                                          message: "Invalid bill total",
-                                          preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            invalidBillAlert()
         }
     }
     
@@ -65,9 +61,17 @@ class CalculatorViewController: UIViewController {
         if segue.identifier == "goToResultsSegue" {
             let resultsVC = segue.destination as! ResultsViewController
             resultsVC.eachPerson = eachPerson
-            resultsVC.tipPercentage = Int(tipPercentage * 100)
+            resultsVC.tip = Int(tip * 100)
             resultsVC.numberOfPeople = Int(numberOfPeople)
         }
+    }
+    
+    func invalidBillAlert() {
+        let alert = UIAlertController(title: "Alert",
+                                      message: "Invalid bill total",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
